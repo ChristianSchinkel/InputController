@@ -8,3 +8,4 @@ InputController.egg-info/PKG-INFO
 InputController.egg-info/SOURCES.txt
 InputController.egg-info/dependency_links.txt
 InputController.egg-info/top_level.txt
+tests/test_input_controller.py

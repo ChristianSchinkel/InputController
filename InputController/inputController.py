@@ -11,11 +11,10 @@ class InputController:
         """Check if the input is a string."""
         return isinstance(user_input, str)
 
-    def format_int(self, prompt: str, user_input: str) -> int:
+    def format_int(self, prompt: str) -> int:
         """Format the input as an integer. If it fails,
         raises a ValueError. And ask the user to input again.
         :param prompt: The prompt to display to the user.
-        :param user_input: The input from the user.
         :return: The formatted integer.
         """
         while True:
@@ -24,24 +23,29 @@ class InputController:
             except ValueError:
                 print("Invalid input. Please enter an integer.")
 
-    def format_float(self, prompt: str, user_input: str) -> float:
+    def format_float(self, prompt: str) -> float:
         """Format the input as a float. If it fails,
         raises a ValueError. And ask the user to input again.
         :param prompt: The prompt to display to the user.
-        :param user_input: The input from the user.
         :return: The formatted float.
         """
         while True:
             try:
-                return float(input(prompt))
+                # Check for ', or '.' in input but not both
+                user_input = input(prompt)
+                removed_thousand_separators = self.thousand_separator_remover(user_input)
+                normalized_decimal = self.decimal_normalizer(removed_thousand_separators)
+                if self.is_integer(normalized_decimal):
+                    print("Input appears to be an integer. Please enter a float.")
+                    continue
+                return float(normalized_decimal)
             except ValueError:
                 print("Invalid input. Please enter a float.")
 
-    def format_bool(self, prompt: str, user_input: str) -> bool:
+    def format_bool(self, prompt: str) -> bool:
         """Format the input as a boolean. If it fails,
         raises a ValueError. And ask the user to input again.
         :param prompt: The prompt to display to the user.
-        :param user_input: The input from the user.
         :return: The formatted boolean.
         """
         while True:
@@ -75,6 +79,40 @@ class InputController:
         """Replace ',' with '.' in the input string."""
         return user_input.replace(',', '.')
 
+    def is_floatable(self, user_input: str) -> bool:
+        """Check if the input string can be converted to a float.
+
+        The string must contain numbers and a float seperoator.
+        then return True.
+
+        If the input contains string characters other than numbers and a float separator,
+        return False.
+        """
+        has_float_separator = self.contain_float_separator(user_input)
+        # Remove float separators for digit check
+        cleaned_input = user_input.replace('.', '').replace(',', '')
+        is_digit = cleaned_input.isdigit()
+
+        return has_float_separator and is_digit
+
+    def thousand_separator_remover(self, user_input: str) -> str:
+        """Remove thousand separators from the input string:
+        If the input has both '.' and ',', assume one is a thousand separator."""
+        if '.' in user_input and ',' in user_input:
+            if user_input.index('.') < user_input.index(','):
+                # Assume '.' is thousand separator
+                return user_input.replace('.', '')
+            else:
+                # Assume ',' is thousand separator
+                return user_input.replace(',', '')
+        return user_input
+
+    def decimal_normalizer(self, user_input: str) -> str:
+        """Normalize the decimal separator to '.'."""
+        if ',' in user_input:
+            return user_input.replace(',', '.')
+        return user_input
+
 
 def main():
     """Main function for Input Controller."""
@@ -83,11 +121,11 @@ def main():
     # Example usage
     user_string = controller.check_input_is_string("Hello")
     print(f"Is 'Hello' a string? {user_string}")
-    user_int = controller.format_int("Enter an integer: ", "")
+    user_int = controller.format_int("Enter an integer: ")
     print(f"You entered integer: {user_int}")
-    user_float = controller.format_float("Enter a float: ", "")
+    user_float = controller.format_float("Enter a float: ")
     print(f"You entered float: {user_float}")
-    user_bool = controller.format_bool("Enter yes or no: ", "")
+    user_bool = controller.format_bool("Enter yes or no: ")
     print(f"You entered boolean: {user_bool}")
 
 

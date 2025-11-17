@@ -1,14 +1,14 @@
 Metadata-Version: 2.4
 Name: InputController
-Version: 0.1
+Version: 0.2
 Summary: This library provides a typesafe CLI input controller.
 Home-page: https://github.com/ChristianSchinkel
-Download-URL: https://github.com/ChristianSchinkel/InputController/archive/refs/tags/v_0.1.tar.gz
+Download-URL: https://github.com/ChristianSchinkel/InputController/archive/refs/tags/v_0.2.tar.gz
 Author: Christian Schinkel
 Author-email: christian.schinkel@me.com
 License: MIT
 Keywords: CLI,Userinput,Typesafe
-Classifier: Development Status :: 3 - Alpha
+Classifier: Development Status :: 4 - Beta
 Classifier: Intended Audience :: Developers
 Classifier: Topic :: Software Development :: Build Tools
 Classifier: License :: OSI Approved :: MIT License
